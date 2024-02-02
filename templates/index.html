@@ -1,0 +1,140 @@
+<html>
+
+<head>
+  <title>CRUD Application</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet"
+    integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
+</head>
+
+<body>
+  {% block body %}
+  <div class="container">
+    <div class="well text-center">
+      <h1>Python Flask</h1>
+    </div>
+    <div class="container">
+      <div class="row">
+        <div class="col md-12">
+          <div class="header" style="display: flex; justify-content: space-between;">
+            <h2>Student list</h2>
+            <button type="button" class="btn btn-success pull-right" data-bs-toggle="modal"
+              data-bs-target="#mymodal">Add Student</button>
+          </div>
+          {% with messages = get_flashed_messages() %}
+          {% if messages %}
+          {% for message in messages %}
+          <div class="alert alert-success alert-dismissable" role="alert"
+            style="display: flex; justify-content: space-between;">
+            {{message}}
+            <a class="close" data-bs-dismiss="alert" aria-label="close"
+              style="text-decoration: none; cursor: pointer;"><span aria-hidden="true">X</span></a>
+
+          </div>
+          {%endfor%}
+          {%endif%}
+          {%endwith%}
+          <table class="table table-striped">
+            <tr>
+              <th>Serial</th>
+              <th>Name</th>
+              <th>Email</th>
+              <th>Phone</th>
+              <th>Action</th>
+            </tr>
+            {% for row in student %}
+            <tr>
+              <td>{{row.0}}</td>
+              <td>{{row.1}}</td>
+              <td>{{row.2}}</td>
+              <td>{{row.3}}</td>
+              <td>
+                <a href="/update/{{row.0}}" class="btn btn-warning btn-xs" data-bs-toggle="modal"
+                  data-bs-target="#modaledit{{row.0}}">Edit</a>
+                <a href="/delete/{{row.0}}" class="btn btn-danger btn-xs"
+                  onclick="return confirm('Are you sure')">Delete</a>
+              </td>
+            </tr>
+            <div id="modaledit{{row.0}}" class="modal fade" role="dialog">
+              <div class="modal-dialog">
+                <div class="modal-content">
+                  <div class="modal-header">
+                    <h4 class="modal-title">Please Update Data</h4>
+                    <a class="close" data-bs-dismiss="modal" aria-label="close"
+              style="text-decoration: none; cursor: pointer; color: black;"><span aria-hidden="true">X</span></a>
+                  </div>
+                  <div class="modal-body">
+                    <form action="{{url_for('update')}}" method="POST">
+                      <div class="form-group">
+                        <label>Name:</label>
+                        <input type="hidden" name="id" value="{{row.0}}">
+                        <input type="text" class="form-control" name="name" value="{{row.1}}">
+                      </div>
+                      <div class="form-group">
+                        <label>Email:</label>
+                        <input type="email" class="form-control" name="email" value="{{row.2}}">
+                      </div>
+                      <div class="form-group">
+                        <label>Phone:</label>
+                        <input type="text" class="form-control" name="phone" value="{{row.3}}">
+                      </div>
+                      <div class="form-group">
+                        <button class="btn btn-primary" type="submit">Update Data</button>
+                      </div>
+                    </form>
+                  </div>
+                  <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-bs-dismiss="modal">Close</button>
+                  </div>
+                </div>
+              </div>
+            </div>
+            {% endfor %}
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div id="mymodal" class="modal fade" role="dialog">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h4 class="modal-title">Please Insert Data</h4>
+          <a class="close" data-bs-dismiss="modal" aria-label="close"
+              style="text-decoration: none; cursor: pointer;color: black;"><span aria-hidden="true">X</span></a>
+        </div>
+        <div class="modal-body">
+          <form action="{{url_for('insert')}}" method="POST">
+            <div class="form-group">
+              <label>Name:</label>
+              <input type="text" class="form-control" name="name" required="1">
+            </div>
+            <div class="form-group">
+              <label>Email:</label>
+              <input type="email" class="form-control" name="email" required="1">
+            </div>
+            <div class="form-group">
+              <label>Phone:</label>
+              <input type="text" class="form-control" name="phone" required="1">
+            </div>
+            <div class="form-group">
+              <button class="btn btn-primary" type="submit">Insert Data</button>
+            </div>
+          </form>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-default" data-bs-dismiss="modal">Close</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  {% endblock %}
+
+  <script src="https://code.jquery.com/jquery-3.7.1.min.js"
+    integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"
+    integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL"
+    crossorigin="anonymous"></script>
+</body>
+
+</html>
